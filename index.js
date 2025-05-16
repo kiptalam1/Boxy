@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
+import cloudinary from "./utils/cloudinary";
 const app = express();
 
 // connect to database;
@@ -9,6 +10,9 @@ mongoose
 	.connect(process.env.MONGO_URI)
 	.then(() => console.log("Connected to mongoDB !"))
 	.catch((err) => console.log("Mongo connection error" + err));
+
+// cloudinary configuration;
+//cloudinary.uploader.upload();
 
 //port;
 const PORT = process.env.PORT || 5000;
