@@ -6,8 +6,10 @@ import cloudinary from "./utils/cloudinary.js";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-import passport from "./configs/passport.js";
+import passport from "passport";
+import configurePassport from "./configs/passport.js";
 import authRoutes from "./routes/authRoutes.js";
+configurePassport(passport);
 const app = express();
 
 // connect to database;
@@ -24,6 +26,7 @@ const PORT = process.env.PORT || 5000;
 
 // middleware;
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(cookieParser());
 
