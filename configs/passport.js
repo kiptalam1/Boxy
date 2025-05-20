@@ -10,18 +10,14 @@ export default function configurePassport(passport) {
 			{ usernameField: "email" },
 			async (email, password, done) => {
 				try {
-					const findUser = await User.findOne({ email });
+					const user = await User.findOne({ email });
 					// if no user is found;
-					if (!findUser)
-						return done(null, false, { message: "User not found" });
+					if (!user) return done(null, false, { message: "User not found" });
 					// if passwords do not match;
-					const passwordMatch = await bcrypt.compare(
-						password,
-						findUser.password
-					);
+					const passwordMatch = await bcrypt.compare(password, user.password);
 					if (!passwordMatch)
 						return done(null, false, { message: "Invalid credentials" });
-					return done(null, findUser);
+					return done(null, user);
 				} catch (error) {
 					done(error);
 				}

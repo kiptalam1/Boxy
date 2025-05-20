@@ -9,7 +9,8 @@ import MongoStore from "connect-mongo";
 import passport from "passport";
 import configurePassport from "./configs/passport.js";
 import authRoutes from "./routes/authRoutes.js";
-configurePassport(passport);
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+
 const app = express();
 
 // connect to database;
@@ -25,11 +26,6 @@ mongoose
 const PORT = process.env.PORT || 5000;
 
 // middleware;
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(passport.initialize());
-app.use(cookieParser());
-
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET,
@@ -47,6 +43,13 @@ app.use(
 	})
 );
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(cookieParser());
+configurePassport(passport);
+
 // base endpoint;
 app.get("/", (req, res) => {
 	res.json({
@@ -55,7 +58,8 @@ app.get("/", (req, res) => {
 });
 
 // routes;
-app.use('/auth', authRoutes);
+app.use("/auth", authRoutes);
+app.use("/", dashboardRoutes);
 
 // listen to app;
 app.listen(PORT, () => {
