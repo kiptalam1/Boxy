@@ -6,10 +6,15 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
+import path from "path";
+import { fileURLToPath } from "url";
 import configurePassport from "./configs/passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -47,11 +52,16 @@ app.use(passport.session());
 app.use(cookieParser());
 configurePassport(passport);
 
+// setup views;
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views")); // Path to views folder
+
+// Serve static files from 'public' folder
+app.use(express.static(path.join(__dirname, "public")));
+
 // base endpoint;
 app.get("/", (req, res) => {
-	res.json({
-		msg: "Welcome home !",
-	});
+	res.render("homepage");
 });
 
 // routes;
