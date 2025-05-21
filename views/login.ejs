@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Register</title>
-		<link rel="stylesheet" href="/css/register.css" />
+		<link rel="stylesheet" href="/css/login.css" />
 		<style>
 			@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 		</style>
@@ -12,20 +12,14 @@
 	<body>
 		<main class="auth-container">
 			<div class="auth-card">
-				<h1>Create Your Account</h1>
-				<p class="subtitle">Start organizing your files in minutes</p>
+				<h1>Welcome Back</h1>
+				<p class="subtitle">Sign in to access your files</p>
 
-				<!-- Registration Form -->
-				<form action="auth/register" method="POST" class="auth-form">
-					<div class="form-group">
-						<label for="displayName">Full Name</label>
-						<input
-							type="text"
-							id="displayName"
-							name="displayName"
-							required
-							placeholder="Enter your name" />
-					</div>
+				<!-- Login Form -->
+				<form action="auth/login" method="POST" class="auth-form">
+					<% if (error) { %>
+					<div class="alert alert-error"><%= error %></div>
+					<% } %>
 
 					<div class="form-group">
 						<label for="email">Email</label>
@@ -34,7 +28,8 @@
 							id="email"
 							name="email"
 							required
-							placeholder="you@example.com" />
+							placeholder="you@example.com"
+							value="<%= values?.email || '' %>" />
 					</div>
 
 					<div class="form-group">
@@ -44,17 +39,25 @@
 							id="password"
 							name="password"
 							required
-							placeholder="At least 8 characters"
-							minlength="8" />
+							placeholder="Enter your password" />
+					</div>
+
+					<div class="form-options">
+						<label class="remember-me">
+							<input type="checkbox" name="remember" /> Remember me
+						</label>
+						<a href="/forgot-password" class="forgot-password"
+							>Forgot password?</a
+						>
 					</div>
 
 					<button type="submit" class="btn btn-primary btn-block">
-						Sign Up
+						Sign In
 					</button>
 				</form>
 
 				<p class="auth-footer">
-					Already have an account? <a href="/auth/login">Log in</a>
+					Don't have an account? <a href="/auth/register">Sign up</a>
 				</p>
 			</div>
 		</main>
