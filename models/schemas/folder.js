@@ -16,6 +16,18 @@ const FolderSchema = new mongoose.Schema(
 			ref: "Folder",
 			default: null,
 		}, // for nesting
+		files: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "File",
+			},
+		],
+		subfolders: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Folder",
+			},
+		],
 		shared: {
 			isShared: { type: Boolean, default: false },
 			expiresAt: { type: Date },

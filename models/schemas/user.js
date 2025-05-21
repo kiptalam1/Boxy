@@ -15,6 +15,11 @@ const UserSchema = mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		rootFolder: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Folder",
+			default: null,
+		},
 	},
 	{ timestamps: true }
 );

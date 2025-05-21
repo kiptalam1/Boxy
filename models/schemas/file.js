@@ -5,6 +5,10 @@ const FileSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	public_id: {
+		type: String,
+		required: true,
+	}, // Cloudinary ID
 	size: {
 		type: Number,
 		required: true,
@@ -25,6 +29,7 @@ const FileSchema = new mongoose.Schema({
 	folder: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Folder",
+		default: null,
 	},
 });
 
