@@ -6,8 +6,10 @@ export async function registerUser(req, res) {
 	const { email, displayName, password } = req.body;
 	try {
 		const existingUser = await User.findOne({ email });
-		if (existingUser)
-			return res.status(400).json({ message: "User already exists" });
+		if (existingUser) {
+			req.session.error = "User already exists";
+			return res.redirect("/auth/register");
+		}
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const user = new User({
@@ -17,11 +19,12 @@ export async function registerUser(req, res) {
 			rootFolder: null,
 		});
 		await user.save();
-		res.status(201).json({ message: "User registered successfully" });
+		req.session.message = "User registered successfully";
+		res.redirect("/auth/login");
 	} catch (err) {
-		res
-			.status(500)
-			.json({ message: "Registration failed", error: err.message });
+		req.session.error = "Registration failed";
+		req.session.oldInput = req.body;
+		res.redirect("/auth/register");
 	}
 }
 
