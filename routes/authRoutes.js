@@ -7,15 +7,24 @@ import { error } from "console";
 const router = express.Router();
 
 router.get("/login", redirectIfAuthenticated, (req, res) => {
+	const message = req.session.message;
+	delete req.session.message;
 	res.render("login", {
 		title: "Login in",
+		message,
 		error: null,
 		values: {},
 	}); // or send login page
 });
 
 router.get("/register", redirectIfAuthenticated, (req, res) => {
-	res.render("register");
+	const { error, message, oldInput } = req.session;
+	// clear session messages after displaying them;
+	delete req.session.message;
+	delete req.session.error;
+	delete req.session.oldInput;
+
+	res.render("register", { error, message, values: oldInput || {} });
 });
 
 router.post("/register", registerUser);
@@ -23,7 +32,7 @@ router.post("/login", redirectIfAuthenticated, (req, res, next) => {
 	try {
 		passport.authenticate("local", (err, user, info) => {
 			if (err) return next(err);
-			if (!user) return res.status(401).json({ message: info.message });
+			if (!user) return res.render("login", { error: info.message });
 
 			req.logIn(user, (err) => {
 				if (err) return next(err);
