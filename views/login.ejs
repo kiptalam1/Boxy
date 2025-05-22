@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Register</title>
+		<title>Login</title>
 		<link rel="stylesheet" href="/css/login.css" />
 		<style>
 			@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
@@ -16,12 +16,22 @@
 				<p class="subtitle">Sign in to access your files</p>
 
 				<!-- Login Form -->
-				<form action="auth/login" method="POST" class="auth-form">
+				<form action="/auth/login" method="POST" class="auth-form">
 					<% if (error) { %>
-					<div class="alert alert-error"><%= error %></div>
+					<div class="alert alert-error">
+						<span class="alert-icon">⚠️</span>
+						<%= error %>
+					</div>
 					<% } %>
 
-					<div class="form-group">
+					<% if (message) { %>
+						<div class="alert alert-success">
+							<span class="alert-icon">✓</span>
+							<%= message %>
+						</div>
+					<% } %>
+
+					<div class="form-group <%= error && error.toLowerCase().includes('email') ? 'error' : '' %>">
 						<label for="email">Email</label>
 						<input
 							type="email"
@@ -30,9 +40,12 @@
 							required
 							placeholder="you@example.com"
 							value="<%= values?.email || '' %>" />
+						<% if (error && error.toLowerCase().includes('email')) { %>
+							<div class="error-message"><%= error %></div>
+						<% } %>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group <%= error && error.toLowerCase().includes('password') ? 'error' : '' %>">
 						<label for="password">Password</label>
 						<input
 							type="password"
@@ -40,13 +53,16 @@
 							name="password"
 							required
 							placeholder="Enter your password" />
+						<% if (error && error.toLowerCase().includes('password')) { %>
+							<div class="error-message"><%= error %></div>
+						<% } %>
 					</div>
 
 					<div class="form-options">
 						<label class="remember-me">
 							<input type="checkbox" name="remember" /> Remember me
 						</label>
-						<a href="/forgot-password" class="forgot-password"
+						<a href="/auth/forgot-password" class="forgot-password"
 							>Forgot password?</a
 						>
 					</div>
