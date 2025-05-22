@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard - Boxy</title>
+		<link rel="stylesheet" href="/css/dashboard.css" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+		</style>
+	</head>
+	<body>
+		<div class="dashboard-container">
+			<!-- Sidebar -->
+			<aside class="sidebar">
+				<div class="logo">
+					<i class="fas fa-box"></i>
+					<span>Boxy</span>
+				</div>
+
+				<nav class="nav-menu">
+					<ul>
+						<li class="active">
+							<a href="/dashboard">
+								<i class="fas fa-home"></i>
+								<span>Home</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fas fa-star"></i>
+								<span>Starred</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fas fa-clock"></i>
+								<span>Recent</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fas fa-trash"></i>
+								<span>Trash</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+
+				<div class="storage">
+					<div class="storage-info">
+						<span>Storage: 15% used</span>
+						<div class="storage-bar">
+							<div class="storage-used" style="width: 15%"></div>
+						</div>
+					</div>
+				</div>
+			</aside>
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<!-- Header -->
+				<header class="header">
+					<div class="search-bar">
+						<i class="fas fa-search"></i>
+						<input type="text" placeholder="Search files..." />
+					</div>
+
+					<div class="user-profile">
+						<img
+							src="https://ui-avatars.com/api/?name=<%= displayName || 'User' %>"
+							alt="Profile" />
+						<span><%= displayName || 'User' %></span>
+						<i class="fas fa-chevron-down"></i>
+					</div>
+				</header>
+
+				<!-- Content Area -->
+				<div class="content-area">
+					<% if (message) { %>
+					<div class="alert alert-success">
+						<i class="fas fa-check-circle"></i>
+						<%= message %>
+					</div>
+					<% } %>
+
+					<div class="toolbar">
+						<h2>
+							<%= currentFolder && currentFolder.name ? currentFolder.name :
+							'MyFiles' %>
+						</h2>
+						<div class="toolbar-actions">
+							<button class="btn-new-folder">
+								<i class="fas fa-folder-plus"></i> New Folder
+							</button>
+							<button class="btn-upload">
+								<i class="fas fa-cloud-upload-alt"></i> Upload Files
+							</button>
+						</div>
+					</div>
+
+					<!-- Files and Folders Section -->
+					<div class="file-grid">
+						<% if (folders && folders.length) { %> <% folders.forEach(folder =>
+						{ %>
+						<div class="file-item folder" data-id="<%= folder._id %>">
+							<div class="file-icon">
+								<i class="fas fa-folder"></i>
+							</div>
+							<div class="file-name"><%= folder.name %></div>
+							<div class="file-actions">
+								<i class="fas fa-ellipsis-v"></i>
+							</div>
+						</div>
+						<% }); %> <% } %> <% if (files && files.length) { %> <%
+						files.forEach(file => { %>
+						<div
+							class="file-item <%= file.fileType %>"
+							data-id="<%= file._id %>">
+							<div class="file-icon">
+								<% if (file.fileType === 'image') { %>
+								<img
+									src="<%= file.thumbnailUrl || file.url %>"
+									alt="<%= file.name %>" />
+								<% } else { %>
+								<i class="fas fa-<%= file.getIcon() %>"></i>
+								<% } %>
+							</div>
+							<div class="file-name"><%= file.name %></div>
+							<div class="file-actions">
+								<i class="fas fa-ellipsis-v"></i>
+							</div>
+						</div>
+						<% }); %> <% } %> <% if ((!files || !files.length) && (!folders ||
+						!folders.length)) { %>
+						<div class="no-files">
+							<i class="fas fa-folder-open"></i>
+							<p>This folder is empty</p>
+							<button class="btn-upload">
+								<i class="fas fa-cloud-upload-alt"></i> Upload Files
+							</button>
+						</div>
+						<% } %>
+					</div>
+				</div>
+			</main>
+		</div>
+
+		<!-- File Context Menu -->
+		<div class="context-menu" id="fileContextMenu">
+			<ul>
+				<li><i class="fas fa-download"></i> Download</li>
+				<li><i class="fas fa-share"></i> Share</li>
+				<li><i class="fas fa-star"></i> Add to Starred</li>
+				<li class="divider"></li>
+				<li class="danger"><i class="fas fa-trash"></i> Move to Trash</li>
+			</ul>
+		</div>
+
+		<!-- New Folder Modal -->
+		<div class="modal" id="newFolderModal">
+			<div class="modal-content">
+				<h3>Create New Folder</h3>
+				<input type="text" id="folderName" placeholder="Folder name" />
+				<div class="modal-actions">
+					<button class="btn-cancel">Cancel</button>
+					<button class="btn-create">Create</button>
+				</div>
+			</div>
+		</div>
+
+		<script src="/js/dashboard.js"></script>
+	</body>
+</html>

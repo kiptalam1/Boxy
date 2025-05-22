@@ -17,6 +17,11 @@ const FileSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	fileType: {
+		type: String,
+		enum: ["image", "document", "video", "audio", "archive", "other"],
+		required: true,
+	},
 	url: {
 		type: String, // cloudinary
 		required: true,
@@ -32,5 +37,19 @@ const FileSchema = new mongoose.Schema({
 		default: null,
 	},
 });
+
+// Helper method to get icon based on file type
+FileSchema.methods.getIcon = function () {
+	const icons = {
+		image: "file-image",
+		document: "file-alt",
+		video: "file-video",
+		audio: "file-audio",
+		archive: "file-archive",
+		other: "file",
+	};
+	return icons[this.fileType] || "file";
+};
+
 
 export default mongoose.model("File", FileSchema);

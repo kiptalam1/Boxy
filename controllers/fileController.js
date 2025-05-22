@@ -32,3 +32,6 @@ export default async function uploadFileToCloudinaryAndDb(req, res) {
 		res.status(500).json({ message: "Upload failed!", error: err.message });
 	}
 }
+export const deleteFromCloudinary = async (public_id) => {
+	return cloudinary.uploader.destroy(public_id);
+};

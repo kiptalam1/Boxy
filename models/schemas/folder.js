@@ -11,7 +11,12 @@ const FolderSchema = new mongoose.Schema(
 			ref: "User",
 			required: true,
 		},
-		parent: {
+		path: { type: String, required: true },
+		isRoot: {
+			type: Boolean,
+			default: false,
+		},
+		parentId: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Folder",
 			default: null,
